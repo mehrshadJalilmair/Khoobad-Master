@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "537079308917",
+    "firebase_url": "https://khoobad-c6102.firebaseio.com",
+    "project_id": "khoobad-c6102",
+    "storage_bucket": "khoobad-c6102.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:537079308917:android:d1322b6d6bd8cab9",
+        "android_client_info": {
+          "package_name": "com.mehrshad.khoobad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "537079308917-mo2phgj3o6njv68aff534cvadjim5hgs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlxBa60so9gD9KvEVTN-4odBPAk_H13KA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

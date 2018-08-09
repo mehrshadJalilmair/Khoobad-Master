@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="toolbar_height">55dp</dimen>
+    <dimen name="TITLE_FONT_SIZE">14sp</dimen>
+    <dimen name="NO_IMAGE_SIZE">60dp</dimen>
+    <dimen name="place_view_row_height">83dp</dimen>
+</resources>
