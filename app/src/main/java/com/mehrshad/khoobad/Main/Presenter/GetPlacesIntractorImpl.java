@@ -19,8 +19,6 @@ public class GetPlacesIntractorImpl implements MainPresenter.GetPlacesIntractor 
         Call<Places> placesCall = new HelperRetrofit().placesScope().snapToPlace(query.getClient_id() ,
                 query.getClient_secret() , query.v , query.limit , query.ll , query.radius);
 
-//        Log.d("response" ,placesCall.request().url().toString());
-
         Callback<Places> placesCallback = new Callback<Places>() {
             @Override
             public void onResponse(@NonNull Call<Places> call, @NonNull final Response<Places> response) {

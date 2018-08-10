@@ -1,10 +1,7 @@
 package com.mehrshad.khoobad.Main.Presenter;
 
-import com.mehrshad.khoobad.Model.Place;
 import com.mehrshad.khoobad.Model.Places;
 import com.mehrshad.khoobad.Model.Query;
-
-import java.util.ArrayList;
 
 public interface MainPresenter {
 

@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.mehrshad.khoobad">
 
+    <!--Network access-->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!--Location Access-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:name=".Khoobad"
@@ -13,7 +18,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
         <activity android:name=".Main.View.Activity.ActPlaces"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
@@ -22,7 +28,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main.View.Activity.ActPlace" />
+        <activity android:name=".Main.View.Activity.ActPlace"
+            tools:ignore="InnerclassSeparator" />
     </application>
 
 </manifest>

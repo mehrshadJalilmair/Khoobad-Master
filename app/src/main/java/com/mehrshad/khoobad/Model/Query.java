@@ -15,7 +15,7 @@ public class Query
     public String v;
     private String client_id;
     private String client_secret;
-    public String radius = "1000";
+    public String radius = "500";
     public String ll;
 
     public String getClient_id() {

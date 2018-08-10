@@ -1,11 +1,17 @@
 package com.mehrshad.khoobad.Main.View.Activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -21,10 +27,17 @@ import com.mehrshad.khoobad.Model.Place;
 import com.mehrshad.khoobad.Model.Places;
 import com.mehrshad.khoobad.Model.Query;
 import com.mehrshad.khoobad.R;
+import com.mehrshad.khoobad.Util.EndlessRecyclerViewScrollListener;
+import com.mehrshad.khoobad.Util.MLocationManager;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
-public class ActPlaces extends AppCompatActivity implements MainPresenter.MainView , SwipeRefreshLayout.OnRefreshListener {
+public class ActPlaces extends AppCompatActivity implements MainPresenter.MainView , SwipeRefreshLayout.OnRefreshListener, MLocationManager.LocationManagerInterface {
 
     private ProgressBar progressBar;
     private MainPresenter.presenter presenter;
@@ -34,6 +47,8 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
     Query placesQuery;
     final Integer queryLimit = 10;
 
+    static public final int REQUEST_LOCATION = 1;
+    MLocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,20 +57,46 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
 
         initializeToolbarAndRecyclerView();
         initProgressBar();
-        initQueryAndFetch();
+        initQuery();
+        initLocationManager();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        locationManager.startUpdatingLocation();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        presenter.onDestroy();
+        locationManager.stopUpdatingLocation();
+    }
+
+    /*
+     * Initializing location manager to access user's location
+     */
+    private void initLocationManager() {
+
+        locationManager = new MLocationManager(this , this);
     }
 
     /*
      * Initializing query and presenter then call foursquare api to fetch nearby places
      */
-    private void initQueryAndFetch() {
+    private void initQuery() {
 
         placesQuery = new Query(this);
-        placesQuery.v = "20180808";
-        placesQuery.ll = "35.697177,51.381544";
+
+        Calendar cal = Calendar.getInstance();
+        Date currentLocalTime = cal.getTime();
+        DateFormat date = new SimpleDateFormat("yyyyMMdd" , Locale.getDefault());
+        placesQuery.v = date.format(currentLocalTime);
 
         presenter = new MainPresenterImpl(this, new GetPlacesIntractorImpl());
-        presenter.fetchPlaces(placesQuery);
     }
 
     /**
@@ -67,20 +108,22 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
         setSupportActionBar(toolbar);
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view_places_list);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(ActPlaces.this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(ActPlaces.this);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-
-                if (!recyclerView.canScrollVertically(1)) {
-
-                    placesQuery.limit += queryLimit;
-                    presenter.loadMore(placesQuery);
-                }
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                placesQuery.limit += queryLimit;
+                presenter.loadMore(placesQuery);
+                Log.d("loadmore" , placesQuery.limit+"");
             }
-        });
+        };
+        recyclerView.addOnScrollListener(scrollListener);
+
 
         swipeRefreshLayout = findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -92,13 +135,8 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
         adapter = new PlacesAdapter(null , onRecyclerItemClickListener);
         recyclerView.setAdapter(adapter);
     }
-    private OnRecyclerItemClickListener onRecyclerItemClickListener = new OnRecyclerItemClickListener() {
-        @Override
-        public void onItemClick(int position) {
-
+    private OnRecyclerItemClickListener onRecyclerItemClickListener = position ->
             Toast.makeText(ActPlaces.this, "item "+position, Toast.LENGTH_SHORT).show();
-        }
-    };
 
     /**
      * Initializing ProgressBar
@@ -144,6 +182,9 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
         }
     }
 
+    /**
+     * Overriding interfaces
+     */
     @Override
     public void onResponseFailure(Throwable throwable) {
 
@@ -166,8 +207,34 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        presenter.onDestroy();
+    public void requestLocationAccess() {
+
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_LOCATION);
+    }
+
+    @Override
+    public void lastKnownLocation(Location currentLocation) {
+
+        placesQuery.ll = currentLocation.getLatitude()+","+currentLocation.getLongitude();
+        presenter.fetchPlaces(placesQuery);
+    }
+
+    /**
+     * User Location Permission Request callback
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == REQUEST_LOCATION) {
+
+            boolean locationAccess = false;
+            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                locationAccess = true;
+            }
+            locationManager.setLocationAccess(locationAccess);
+        }
     }
 }
