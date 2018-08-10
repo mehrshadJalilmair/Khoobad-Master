@@ -17,11 +17,11 @@ public class Query
     private String client_secret;
     public String radius = "500";
     public String ll;
+    public boolean cachedPlaces = false;
 
     public String getClient_id() {
         return client_id;
     }
-
     public String getClient_secret() {
         return client_secret;
     }

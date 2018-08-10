@@ -41,25 +41,6 @@ public class HelperRetrofit {
         Gson gson = new GsonBuilder().setLenient().create();
         retrofit = new Retrofit.Builder().baseUrl(baseUrl).client(httpClient).addConverterFactory(GsonConverterFactory.create(gson)).build();
 
-        new NetworkTracker().checkConnection(context, new NetworkTracker.OnNetworkStatusListener() {
-            @Override
-            public void onNetworkAvailable() {
-
-
-            }
-
-            @Override
-            public void onNetworkNotAvailable() {
-
-
-            }
-
-            @Override
-            public void onNoProvider() {
-
-            }
-        });
-
         return retrofit;
     }
 

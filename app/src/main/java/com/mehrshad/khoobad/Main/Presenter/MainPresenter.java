@@ -47,5 +47,6 @@ public interface MainPresenter {
             void onFailure(Throwable t);
         }
         void getPlaces(OnFinishedListener onFinishedListener, Query query);
+        void onDestroy();
     }
 }

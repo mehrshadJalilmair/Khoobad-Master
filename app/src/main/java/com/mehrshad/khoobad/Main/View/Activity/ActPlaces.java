@@ -27,15 +27,12 @@ import com.mehrshad.khoobad.Model.Place;
 import com.mehrshad.khoobad.Model.Places;
 import com.mehrshad.khoobad.Model.Query;
 import com.mehrshad.khoobad.R;
+import com.mehrshad.khoobad.Util.DateFormatter;
 import com.mehrshad.khoobad.Util.EndlessRecyclerViewScrollListener;
 import com.mehrshad.khoobad.Util.MLocationManager;
+import com.mehrshad.khoobad.Util.PreferenceHelper;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class ActPlaces extends AppCompatActivity implements MainPresenter.MainView , SwipeRefreshLayout.OnRefreshListener, MLocationManager.LocationManagerInterface {
 
@@ -90,12 +87,7 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
     private void initQuery() {
 
         placesQuery = new Query(this);
-
-        Calendar cal = Calendar.getInstance();
-        Date currentLocalTime = cal.getTime();
-        DateFormat date = new SimpleDateFormat("yyyyMMdd" , Locale.getDefault());
-        placesQuery.v = date.format(currentLocalTime);
-
+        placesQuery.v = DateFormatter.currentDate();
         presenter = new MainPresenterImpl(this, new GetPlacesIntractorImpl());
     }
 
@@ -168,7 +160,6 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
         if (places.getResponse().getTotalResults() > 0)
         {
             ArrayList<Place> placeArrayList = new ArrayList<>();
-
             /*
              * merging all venues of all groups
              */
@@ -177,7 +168,7 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
 
                 placeArrayList.addAll(group.getItems());
             }
-
+            PreferenceHelper.getInstance().setCachedPlaces(places);
             adapter.addMorePlaces(placeArrayList);
         }
     }
@@ -186,7 +177,7 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
      * Overriding interfaces
      */
     @Override
-    public void onResponseFailure(Throwable throwable) {
+    public void onResponseFailure(Throwable throwable) { //null or not null
 
         Toast.makeText(this, "Failed!", Toast.LENGTH_SHORT).show();
     }
@@ -216,7 +207,15 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
     @Override
     public void lastKnownLocation(Location currentLocation) {
 
+        placesQuery.cachedPlaces = false;
         placesQuery.ll = currentLocation.getLatitude()+","+currentLocation.getLongitude();
+        presenter.fetchPlaces(placesQuery);
+    }
+
+    @Override
+    public void userLocationUnchanged(Location cachedLocation) {
+
+        placesQuery.cachedPlaces = true;
         presenter.fetchPlaces(placesQuery);
     }
 
