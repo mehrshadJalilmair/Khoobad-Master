@@ -5,5 +5,6 @@
     <string name="foursquare_client_id">SA5OU5JKU20VMVQINTTRE2TVFJ1E4MAI3ZMMEMF10IE42ZSD</string>
     <string name="foursquare_client_secret">GGRNNAZNSNCCTAD4RHWTD5BL33H50CUNTOWPDMRRRCYT10S4</string>
     <string name="TXT_NEARBY_PLACES">مکان های نزدیک شما</string>
+    <string name="TXT_NO_PLACES">مکانی در اطراف شما یافت نشد.</string>
 
 </resources>

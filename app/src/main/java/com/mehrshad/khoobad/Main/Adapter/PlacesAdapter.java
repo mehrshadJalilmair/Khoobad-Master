@@ -16,16 +16,21 @@ import com.mehrshad.khoobad.Interface.OnRecyclerItemClickListener;
 import com.mehrshad.khoobad.Khoobad;
 import com.mehrshad.khoobad.Model.Place;
 import com.mehrshad.khoobad.R;
+import com.mehrshad.khoobad.Util.GeneralFunctions;
 import com.mehrshad.khoobad.Util.ImageHelper;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
 import java.util.ArrayList;
 
-public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceViewHolder> {
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
+public class PlacesAdapter extends RecyclerView.Adapter<PlaceViewHolder> {
 
     private ArrayList<Place> places;
     private OnRecyclerItemClickListener onRecyclerItemClickListener;
+
 
     public PlacesAdapter(ArrayList<Place> places , OnRecyclerItemClickListener onRecyclerItemClickListener ) {
 
@@ -78,12 +83,12 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceViewH
         }
 
         holder.nameTv.setText(venue.getName());
-        holder.distTv.setText(venue.getLocation().getDistance().toString());
+        holder.distTv.setText(GeneralFunctions.english_to_persian(venue.getLocation().getDistance().toString()));
         holder.categoryTv.setText(venue.getCategories().get(0).getName());
 
         if (venue.getRating() != null)
         {
-            holder.rateTv.setVisibility(View.VISIBLE);
+            holder.rateTv.setVisibility(VISIBLE);
             holder.rateTv.setText(venue.getRating().toString());
             holder.rateTv.setBackgroundResource(R.drawable.rating_tv_corner);
             GradientDrawable drawable = (GradientDrawable) holder.rateTv.getBackground();
@@ -98,22 +103,5 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesAdapter.PlaceViewH
 
         if (places == null)return 0;
         return places.size();
-    }
-
-    class PlaceViewHolder extends RecyclerView.ViewHolder {
-
-        ImageView imageView;
-        TextView nameTv,distTv,categoryTv,rateTv;
-
-        PlaceViewHolder(View itemView) {
-            super(itemView);
-
-            imageView = itemView.findViewById(R.id.placeImg);
-
-            nameTv = itemView.findViewById(R.id.ven_name);
-            distTv = itemView.findViewById(R.id.ven_distance);
-            categoryTv = itemView.findViewById(R.id.ven_category);
-            rateTv = itemView.findViewById(R.id.ven_rating);
-        }
     }
 }

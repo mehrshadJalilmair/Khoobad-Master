@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.mehrshad.khoobad.Interface.OnRecyclerItemClickListener;
+import com.mehrshad.khoobad.Main.Adapter.MRecyclerView;
 import com.mehrshad.khoobad.Main.Adapter.PlacesAdapter;
 import com.mehrshad.khoobad.Main.Presenter.GetPlacesIntractorImpl;
 import com.mehrshad.khoobad.Main.Presenter.MainPresenter;
@@ -33,6 +34,8 @@ import com.mehrshad.khoobad.Util.MLocationManager;
 import com.mehrshad.khoobad.Util.PreferenceHelper;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class ActPlaces extends AppCompatActivity implements MainPresenter.MainView , SwipeRefreshLayout.OnRefreshListener, MLocationManager.LocationManagerInterface {
 
@@ -40,12 +43,10 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
     private MainPresenter.presenter presenter;
     private PlacesAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
+    MLocationManager locationManager;
 
     Query placesQuery;
-    final Integer queryLimit = 10;
-
     static public final int REQUEST_LOCATION = 1;
-    MLocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +100,10 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view_places_list);
+        MRecyclerView recyclerView = findViewById(R.id.recycler_view_places_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActPlaces.this);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setEmptyView(findViewById(R.id.no_places_tv));
 
         // Retain an instance so that you can call `resetState()` for fresh searches
         EndlessRecyclerViewScrollListener scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
@@ -109,13 +111,12 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
-                placesQuery.limit += queryLimit;
+                placesQuery.limit += placesQuery.queryLimitIncBy;
                 presenter.loadMore(placesQuery);
                 Log.d("loadmore" , placesQuery.limit+"");
             }
         };
         recyclerView.addOnScrollListener(scrollListener);
-
 
         swipeRefreshLayout = findViewById(R.id.swipe_container);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -150,16 +151,16 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
     @Override
     public void onRefresh() {
 
-        placesQuery.limit = queryLimit;
+        placesQuery.limit = placesQuery.queryLimitIncBy;
         presenter.onRefresh(placesQuery);
     }
 
     @Override
     public void setDataToRecyclerView(Places places) {
 
+        ArrayList<Place> placeArrayList = new ArrayList<>();
         if (places.getResponse().getTotalResults() > 0)
         {
-            ArrayList<Place> placeArrayList = new ArrayList<>();
             /*
              * merging all venues of all groups
              */
@@ -168,9 +169,11 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
 
                 placeArrayList.addAll(group.getItems());
             }
-            PreferenceHelper.getInstance().setCachedPlaces(places);
-            adapter.addMorePlaces(placeArrayList);
         }
+        Collections.sort(placeArrayList
+                , (o1, o2) -> o2.getVenue().getLocation().getDistance().compareTo(o1.getVenue().getLocation().getDistance()));
+        PreferenceHelper.getInstance().setCachedPlaces(places);
+        adapter.addMorePlaces(placeArrayList);
     }
 
     /**
@@ -208,6 +211,7 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
     public void lastKnownLocation(Location currentLocation) {
 
         placesQuery.cachedPlaces = false;
+        placesQuery.limit = 30;
         placesQuery.ll = currentLocation.getLatitude()+","+currentLocation.getLongitude();
         presenter.fetchPlaces(placesQuery);
     }
@@ -229,11 +233,12 @@ public class ActPlaces extends AppCompatActivity implements MainPresenter.MainVi
         if (requestCode == REQUEST_LOCATION) {
 
             boolean locationAccess = false;
-            if(grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                 locationAccess = true;
             }
             locationManager.setLocationAccess(locationAccess);
+            if (locationAccess)locationManager.startUpdatingLocation();
         }
     }
 }

@@ -15,6 +15,7 @@ public interface FoursquareService {
                              @Query("v") String v,
                              @Query("limit") Integer limit,
                              @Query("ll") String ll,
+                             @Query("intent") String intent,
                              @Query("radius") String radius);
 
     @GET("venues/")

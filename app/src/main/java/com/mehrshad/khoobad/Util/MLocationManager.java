@@ -34,7 +34,8 @@ public class MLocationManager {
     private Location cachedLocation;
 
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 60000;
-    private static final long SMALLEST_UPDATE_DISPLACEMENT_IN_METERS = 100;
+    private static final long SMALLEST_UPDATE_DISPLACEMENT_IN_METERS = 10;
+
 
     public MLocationManager(Activity activity, LocationManagerInterface locationManagerInterface) {
 
@@ -47,7 +48,6 @@ public class MLocationManager {
         else
         {
             setLocationAccess(true);
-            initLocationUpdateRequest();
         }
     }
 
@@ -57,7 +57,7 @@ public class MLocationManager {
 
     private void initLocationUpdateRequest()
     {
-        this.locationRequest = new LocationRequest();
+        this.locationRequest = LocationRequest.create();
         this.locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         this.locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         this.locationRequest.setSmallestDisplacement(SMALLEST_UPDATE_DISPLACEMENT_IN_METERS);

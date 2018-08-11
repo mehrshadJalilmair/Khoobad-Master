@@ -20,12 +20,12 @@ public class GetPlacesIntractorImpl implements MainPresenter.GetPlacesIntractor 
     @Override
     public void getPlaces(OnFinishedListener onFinishedListener , Query query) {
 
-        if (query.cachedPlaces || !InternetConnection.getInstance().isConnected())
+        if (query.cachedPlaces || (!InternetConnection.getInstance().isConnected() && query.cachedPlaces))
         {
             Places places =  PreferenceHelper.getInstance().getCachedPlaces();
             if (places == null)
             {
-                onFinishedListener.onFailure(null);
+                onFinishedListener.onFailure(null); //there is no cached place
             }
             else
             {
@@ -34,35 +34,43 @@ public class GetPlacesIntractorImpl implements MainPresenter.GetPlacesIntractor 
         }
         else
         {
-            Call<Places> placesCall = new HelperRetrofit().placesScope().snapToPlace(query.getClient_id() ,
-                    query.getClient_secret() , query.v , query.limit , query.ll , query.radius);
+            if (InternetConnection.getInstance().isConnected())
+            {
+                Call<Places> placesCall = new HelperRetrofit().placesScope().snapToPlace(query.getClient_id() ,
+                        query.getClient_secret() , query.v , query.limit , query.ll , query.intent , query.radius);
 
-            placesCallback = new Callback<Places>() {
-                @Override
-                public void onResponse(@NonNull Call<Places> call, @NonNull final Response<Places> response) {
+                Log.d("urlurl" , placesCall.request().url().toString());
 
-                    if (response.isSuccessful()) {
+                placesCallback = new Callback<Places>() {
+                    @Override
+                    public void onResponse(@NonNull Call<Places> call, @NonNull final Response<Places> response) {
 
-                        if (response.body() != null) {
-                            if (response.body().getMeta() != null) {
-                                if (response.body().getMeta().getCode().equalsIgnoreCase("200")) {
-                                    onFinishedListener.onFinished(response.body());
-                                    return;
+                        if (response.isSuccessful()) {
+
+                            if (response.body() != null) {
+                                if (response.body().getMeta() != null) {
+                                    if (response.body().getMeta().getCode().equalsIgnoreCase("200")) {
+                                        onFinishedListener.onFinished(response.body());
+                                        return;
+                                    }
                                 }
                             }
                         }
+                        onFinishedListener.onFailure(null); //status is not  >= 200 or < 300
                     }
-                    onFinishedListener.onFailure(null);
-                }
 
-                @Override
-                public void onFailure(@NonNull Call<Places> call, @NonNull Throwable t) {
+                    @Override
+                    public void onFailure(@NonNull Call<Places> call, @NonNull Throwable t) {
 
-                    Log.d("response" ,t.getMessage());
-                    onFinishedListener.onFailure(t);
-                }
-            };
-            placesCall.enqueue(placesCallback);
+                        onFinishedListener.onFailure(t); //400
+                    }
+                };
+                placesCall.enqueue(placesCallback);
+            }
+            else
+            {
+                onFinishedListener.onFailure(null); //there is no internet connection
+            }
         }
     }
 
