@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main.View.Activity.ActPlaces">
+    tools:context=".Main.View.Activity.ActVenues">
 
     <include
         android:id="@+id/include"
@@ -27,7 +27,7 @@
         app:layout_constraintVertical_bias="0.0">
 
         <com.mehrshad.khoobad.Main.Adapter.MRecyclerView
-            android:id="@+id/recycler_view_places_list"
+            android:id="@+id/recycler_view_venues_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="4dp"
@@ -43,7 +43,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <TextView
-        android:id="@+id/no_places_tv"
+        android:id="@+id/no_venue_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="0dp"
@@ -51,7 +51,7 @@
         android:layout_marginRight="0dp"
         android:layout_marginStart="0dp"
         android:visibility="gone"
-        android:text="@string/TXT_NO_PLACES"
+        android:text="@string/TXT_NO_VENUES"
         app:layout_constraintEnd_toEndOf="@+id/swipe_container"
         app:layout_constraintStart_toStartOf="@+id/swipe_container"
         app:layout_constraintTop_toTopOf="@+id/swipe_container"

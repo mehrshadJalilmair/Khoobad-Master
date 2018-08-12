@@ -1,6 +1,7 @@
 package com.mehrshad.khoobad.Main.Presenter;
 
-import com.mehrshad.khoobad.Model.Places;
+import com.mehrshad.khoobad.Model.VenueDetails;
+import com.mehrshad.khoobad.Model.Venues;
 import com.mehrshad.khoobad.Model.Query;
 
 public interface MainPresenter {
@@ -14,9 +15,11 @@ public interface MainPresenter {
 
         void onRefresh(Query query);
 
-        void fetchPlaces(Query query);
+        void fetchVenues(Query query);
 
         void loadMore(Query query);
+
+        void fetchVenueById(String VENUE_ID, String VERSIONING);
     }
 
     /**
@@ -31,22 +34,32 @@ public interface MainPresenter {
 
         void endRefreshing();
 
-        void setDataToRecyclerView(Places places);
+        void setDataToRecyclerView(Venues venues);
 
-        void onResponseFailure(Throwable throwable);
+        void onResponseFailure(String throwable);
+
+        void showVenueDetails(VenueDetails venueDetails);
+
+        void onGetVenueFailure(String throwable);
     }
 
     /**
      * Intractors are classes built for fetching data from your database, web services, or any other data source.
      **/
-    interface GetPlacesIntractor {
+    interface GetVenuesIntractor {
 
         interface OnFinishedListener {
 
-            void onFinished(Places places);
-            void onFailure(Throwable t);
+            void onFinished(Venues venues);
+            void onFailure(String t);
         }
-        void getPlaces(OnFinishedListener onFinishedListener, Query query);
+        interface OnGetVenueFinishedListener
+        {
+            void onGetVenueFinished(VenueDetails venueDetails);
+            void onGetVenueFailure(String t);
+        }
+        void getVenues(OnFinishedListener onFinishedListener, Query query);
+        void getVenueById(OnGetVenueFinishedListener onGetVenueFinishedListener, String VENUE_ID, String VERSIONING);
         void onDestroy();
     }
 }

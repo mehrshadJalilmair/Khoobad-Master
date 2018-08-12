@@ -6,7 +6,7 @@ import android.location.Location;
 
 import com.google.gson.Gson;
 import com.mehrshad.khoobad.Khoobad;
-import com.mehrshad.khoobad.Model.Places;
+import com.mehrshad.khoobad.Model.Venues;
 
 public class PreferenceHelper {
     private static final PreferenceHelper ourInstance = new PreferenceHelper();
@@ -22,25 +22,25 @@ public class PreferenceHelper {
     private SharedPreferences sharedPreferences;
 
     private String CACHED_LOCATION_PREF_TAG = "lastLocation";
-    private String CACHED_PLACES_PREF_TAG = "lastPlaces";
+    private String CACHED_VENUES_PREF_TAG = "lastVenues";
 
     /*
-     * Places pref methods
+     * Venues pref methods
      */
-    public Places getCachedPlaces()
+    public Venues getCachedVenues()
     {
-        String json = sharedPreferences.getString(CACHED_PLACES_PREF_TAG, null);
-        return json == null ? null : new Gson().fromJson(json, Places.class);
+        String json = sharedPreferences.getString(CACHED_VENUES_PREF_TAG, null);
+        return json == null ? null : new Gson().fromJson(json, Venues.class);
     }
 
-    public void setCachedPlaces(Places places)
+    public void setCachedVenues(Venues venues)
     {
-        String json = places == null ? null : new Gson().toJson(places);
-        sharedPreferences.edit().putString(CACHED_PLACES_PREF_TAG, json).apply();
+        String json = venues == null ? null : new Gson().toJson(venues);
+        sharedPreferences.edit().putString(CACHED_VENUES_PREF_TAG, json).apply();
     }
 
    /*
-   * Location pref methods
+   * VenueLocation pref methods
    */
     public Location getCachedLocation()
     {

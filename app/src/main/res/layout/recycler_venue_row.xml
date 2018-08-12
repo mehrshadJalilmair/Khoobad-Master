@@ -7,7 +7,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/placeImg"
+        android:id="@+id/venueImg"
         android:layout_width="@dimen/NO_IMAGE_SIZE"
         android:layout_height="@dimen/NO_IMAGE_SIZE"
         android:layout_marginEnd="8dp"
@@ -28,11 +28,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:textSize="14sp"
-        android:textColor="@color/colorPrimary"
-        app:layout_constraintEnd_toStartOf="@+id/placeImg"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toStartOf="@+id/venueImg"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/ven_rating"
-        app:layout_constraintTop_toTopOf="@+id/placeImg"
+        app:layout_constraintTop_toTopOf="@+id/venueImg"
          />
 
     <TextView
@@ -46,7 +46,7 @@
         android:layout_marginTop="4dp"
         android:textSize="12sp"
         android:textColor="@color/colorDark"
-        app:layout_constraintEnd_toStartOf="@+id/placeImg"
+        app:layout_constraintEnd_toStartOf="@+id/venueImg"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/ven_rating"
         app:layout_constraintTop_toBottomOf="@+id/ven_name"
@@ -62,7 +62,7 @@
         android:layout_marginTop="4dp"
         android:textColor="@color/colorGray"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/placeImg"
+        app:layout_constraintEnd_toStartOf="@+id/venueImg"
         app:layout_constraintTop_toBottomOf="@+id/ven_category" />
 
 

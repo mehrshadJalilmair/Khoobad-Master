@@ -7,15 +7,15 @@ import android.widget.TextView;
 
 import com.mehrshad.khoobad.R;
 
-class PlaceViewHolder extends RecyclerView.ViewHolder {
+class VenueViewHolder extends RecyclerView.ViewHolder {
 
     ImageView imageView;
     TextView nameTv,distTv,categoryTv,rateTv;
 
-    PlaceViewHolder(View itemView) {
+    VenueViewHolder(View itemView) {
         super(itemView);
 
-        imageView = itemView.findViewById(R.id.placeImg);
+        imageView = itemView.findViewById(R.id.venueImg);
 
         nameTv = itemView.findViewById(R.id.ven_name);
         distTv = itemView.findViewById(R.id.ven_distance);

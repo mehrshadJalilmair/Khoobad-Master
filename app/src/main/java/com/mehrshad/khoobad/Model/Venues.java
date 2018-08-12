@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 
-public class Places {
+public class Venues {
 
     @SerializedName("meta")
     private Meta meta;
@@ -64,13 +64,13 @@ public class Places {
         public class Group {
 
             @SerializedName("items")
-            private ArrayList<Place> items;
+            private ArrayList<Venue> items;
 
-            public ArrayList<Place> getItems() {
+            public ArrayList<Venue> getItems() {
                 return items;
             }
 
-            public void setItems(ArrayList<Place> items) {
+            public void setItems(ArrayList<Venue> items) {
                 this.items = items;
             }
         }

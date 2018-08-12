@@ -44,7 +44,7 @@ public class HelperRetrofit {
         return retrofit;
     }
 
-    public FoursquareService placesScope() {
+    public FoursquareService venuesScope() {
 
         return configureRetrofit("https://api.foursquare.com/v2/").create(FoursquareService.class);
     }

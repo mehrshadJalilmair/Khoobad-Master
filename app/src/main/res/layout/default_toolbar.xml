@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/toolbar_height"
     android:gravity="center"
-    android:background="@color/colorPrimary"
+    android:background="@color/colorPrimaryDark"
     tools:targetApi="lollipop"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
@@ -19,7 +19,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/TITLE_FONT_SIZE"
-                android:text="@string/TXT_NEARBY_PLACES"
+                android:text="@string/TXT_NEARBY_VENUES"
                 android:textColor="@color/WHITE" />
 
             <!--<ImageButton-->

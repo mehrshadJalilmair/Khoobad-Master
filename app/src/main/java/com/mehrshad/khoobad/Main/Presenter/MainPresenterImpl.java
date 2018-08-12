@@ -1,62 +1,88 @@
 package com.mehrshad.khoobad.Main.Presenter;
 
-import com.mehrshad.khoobad.Model.Places;
+import com.mehrshad.khoobad.Model.VenueDetails;
+import com.mehrshad.khoobad.Model.Venues;
 import com.mehrshad.khoobad.Model.Query;
 
-public class MainPresenterImpl implements MainPresenter.presenter, MainPresenter.GetPlacesIntractor.OnFinishedListener {
+public class MainPresenterImpl implements MainPresenter.presenter, MainPresenter.GetVenuesIntractor.OnFinishedListener , MainPresenter.GetVenuesIntractor.OnGetVenueFinishedListener {
 
     private MainPresenter.MainView mainView;
-    private MainPresenter.GetPlacesIntractor getPlacesIntractor;
+    private MainPresenter.GetVenuesIntractor getVenuesIntractor;
 
-    public MainPresenterImpl(MainPresenter.MainView mainView, MainPresenter.GetPlacesIntractor getPlacesIntractor) {
+    public MainPresenterImpl(MainPresenter.MainView mainView, MainPresenter.GetVenuesIntractor getVenuesIntractor) {
 
         this.mainView = mainView;
-        this.getPlacesIntractor = getPlacesIntractor;
+        this.getVenuesIntractor = getVenuesIntractor;
     }
 
     @Override
     public void onDestroy() {
 
         mainView = null;
-        getPlacesIntractor.onDestroy();
+        getVenuesIntractor.onDestroy();
     }
 
     @Override
     public void onRefresh(Query query) {
 
-        getPlacesIntractor.getPlaces(this , query);
+        getVenuesIntractor.getVenues(this , query);
     }
 
     @Override
-    public void fetchPlaces(Query query) {
+    public void fetchVenues(Query query) {
 
         mainView.showProgress();
-        getPlacesIntractor.getPlaces(this , query);
+        getVenuesIntractor.getVenues(this , query);
     }
 
     @Override
     public void loadMore(Query query) {
 
-        getPlacesIntractor.getPlaces(this , query);
+        getVenuesIntractor.getVenues(this , query);
     }
 
     @Override
-    public void onFinished(Places places) {
+    public void fetchVenueById(String VENUE_ID, String VERSIONING) {
+
+        mainView.showProgress();
+        getVenuesIntractor.getVenueById(this , VENUE_ID, VERSIONING);
+    }
+
+    @Override
+    public void onFinished(Venues venues) {
 
         if(mainView != null){
-            mainView.setDataToRecyclerView(places);
+            mainView.setDataToRecyclerView(venues);
             mainView.hideProgress();
             mainView.endRefreshing();
         }
     }
 
     @Override
-    public void onFailure(Throwable t) {
+    public void onFailure(String t) {
 
         if(mainView != null){
             mainView.onResponseFailure(t);
             mainView.hideProgress();
             mainView.endRefreshing();
+        }
+    }
+
+    @Override
+    public void onGetVenueFinished(VenueDetails venueDetails) {
+
+        if(mainView != null){
+            mainView.hideProgress();
+            mainView.showVenueDetails(venueDetails);
+        }
+    }
+
+    @Override
+    public void onGetVenueFailure(String t) {
+
+        if(mainView != null){
+            mainView.hideProgress();
+            mainView.onGetVenueFailure(t);
         }
     }
 }
