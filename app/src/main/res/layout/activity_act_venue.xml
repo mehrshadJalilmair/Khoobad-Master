@@ -18,8 +18,8 @@
             <android.support.v4.view.ViewPager
                 android:id="@+id/image_slider"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="@color/colorPrimaryDark" />
+                android:layout_height="220dp"
+                android:background="@drawable/no_image" />
 
             <android.support.constraint.ConstraintLayout
                 android:id="@+id/constraintLayout"
@@ -37,12 +37,15 @@
 
                 <TextView
                     android:id="@+id/ven_name"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
+                    android:layout_marginStart="8dp"
+                    android:textAlignment="center"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="15sp"
-                    android:text="مکان مکان"
-                    android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -51,24 +54,153 @@
                     android:id="@+id/ratingBar"
                     android:layout_width="wrap_content"
                     android:layout_height="40dp"
-                    android:layout_marginTop="8dp"
                     android:isIndicator="true"
                     android:numStars="5"
-                    android:scaleX="0.3"
-                    android:scaleY="0.3"
+                    android:scaleX="0.4"
+                    android:scaleY="0.4"
                     android:stepSize="0.5"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/ven_name" />
+                    app:layout_constraintTop_toBottomOf="@+id/ven_name" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/ratingBar"
                     >
 
+                    <TextView
+                        android:id="@+id/ven_desc"
+                        android:textAlignment="center"
+                        android:padding="8dp"
+                        android:visibility="gone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <View
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="40dp"
+                        android:layout_marginStart="40dp"
+                        android:background="@color/colorGray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0.25dp"
+                        />
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageButton
+                            android:id="@+id/ven_location_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/Transparent"
+                            android:padding="8dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_address"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/ven_address"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/TXT_NOT_REGISTERD"
+                            app:layout_constraintBottom_toBottomOf="@+id/ven_location_btn"
+                            app:layout_constraintEnd_toStartOf="@+id/ven_location_btn"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/ven_location_btn" />
+                    </android.support.constraint.ConstraintLayout>
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:id="@+id/ven_opening_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:padding="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/Transparent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_clock"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/ven_opening"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:textAlignment="viewEnd"
+                            android:layout_gravity="end"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:text="@string/TXT_NOT_REGISTERD"
+                            app:layout_constraintBottom_toBottomOf="@+id/ven_opening_btn"
+                            app:layout_constraintEnd_toStartOf="@+id/ven_opening_btn"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/ven_opening_btn" />
+                    </android.support.constraint.ConstraintLayout>
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <ImageButton
+                            android:id="@+id/ven_phone_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginRight="8dp"
+                            android:padding="8dp"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/Transparent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_call"
+                            tools:ignore="ContentDescription" />
+
+                        <TextView
+                            android:id="@+id/ven_phone"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginLeft="8dp"
+                            android:layout_marginStart="8dp"
+                            android:autoLink="phone"
+                            android:textColorLink="@color/GREEN"
+                            android:text="@string/TXT_NOT_REGISTERD"
+                            android:textAlignment="viewEnd"
+                            app:layout_constraintBottom_toBottomOf="@+id/ven_phone_btn"
+                            app:layout_constraintEnd_toStartOf="@+id/ven_phone_btn"
+                            app:layout_constraintHorizontal_bias="1.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/ven_phone_btn"
+                             />
+                    </android.support.constraint.ConstraintLayout>
+
+                    <View
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginStart="20dp"
+                        android:background="@color/colorGray"
+                        android:layout_width="wrap_content"
+                        android:layout_height="0.25dp"
+                        />
 
                 </LinearLayout>
             </android.support.constraint.ConstraintLayout>
@@ -125,10 +257,8 @@
                 app:layout_constraintTop_toTopOf="@+id/image_slider"
                 tools:ignore="ContentDescription,SmallSp" />
 
-
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
-
 
 
 </android.support.constraint.ConstraintLayout>

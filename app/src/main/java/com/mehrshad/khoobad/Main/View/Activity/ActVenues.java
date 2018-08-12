@@ -45,7 +45,8 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
     private MainPresenter.presenter presenter;
     private VenuesAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
-    MLocationManager locationManager;
+    private MLocationManager locationManager;
+    private MRecyclerView recyclerView;
 
     Query venuesQuery;
     static public final int REQUEST_LOCATION = 1;
@@ -72,8 +73,8 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
     protected void onDestroy() {
         super.onDestroy();
 
-        presenter.onDestroy();
-        //locationManager.stopUpdatingLocation();
+        if (presenter != null)presenter.onDestroy();
+        if (locationManager != null)locationManager.stopUpdatingLocation();
     }
 
     /*
@@ -103,7 +104,7 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        MRecyclerView recyclerView = findViewById(R.id.recycler_view_venues_list);
+        recyclerView = findViewById(R.id.recycler_view_venues_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(ActVenues.this);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setEmptyView(findViewById(R.id.no_venue_tv));
@@ -132,8 +133,14 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
         recyclerView.setAdapter(adapter);
     }
 
-    private OnRecyclerItemClickListener onRecyclerItemClickListener = VENUE_ID ->
+    private OnRecyclerItemClickListener onRecyclerItemClickListener = new OnRecyclerItemClickListener() {
+        @Override
+        public void onItemClick(String VENUE_ID) {
+
+            runOnUiThread(() -> recyclerView.setEnabled(false));
             presenter.fetchVenueById(VENUE_ID , DateFormatter.currentDate());
+        }
+    };
 
     /**
      * Initializing ProgressBar
@@ -192,6 +199,7 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
     @Override
     public void showVenueDetails(VenueDetails venueDetails) {
 
+        runOnUiThread(() -> recyclerView.setEnabled(true)); //single selection;
         String venueDetailsStr = GeneralFunctions.stringOf(venueDetails);
         if (venueDetailsStr == null)
         {
@@ -206,6 +214,7 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
     @Override
     public void onGetVenueFailure(String throwable) {
 
+        runOnUiThread(() -> recyclerView.setEnabled(true)); //single selection;
         Toast.makeText(this, throwable, Toast.LENGTH_SHORT).show();
     }
 

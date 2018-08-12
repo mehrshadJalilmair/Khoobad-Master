@@ -1,8 +1,11 @@
 package com.mehrshad.khoobad.Model;
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class VenueLocation
 {
@@ -38,6 +41,18 @@ public class VenueLocation
     }
 
     public String getAddress() {
+
+        String address = this.address;
+        ArrayList<String> tempElements = getFormattedAddress();
+
+        if (tempElements != null)
+        {
+            if (!tempElements.isEmpty())
+
+                Collections.reverse(tempElements);
+                address = TextUtils.join("," , tempElements);
+
+        }
         return address;
     }
 

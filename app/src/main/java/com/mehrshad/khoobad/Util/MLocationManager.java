@@ -33,9 +33,8 @@ public class MLocationManager {
     private Location currentLocation;
     private Location cachedLocation;
 
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 60000;
-    private static final long SMALLEST_UPDATE_DISPLACEMENT_IN_METERS = 10;
-
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 6000;
+//    private static final long SMALLEST_UPDATE_DISPLACEMENT_IN_METERS = 100; //does not work properly
 
     public MLocationManager(Activity activity, LocationManagerInterface locationManagerInterface) {
 
@@ -52,7 +51,10 @@ public class MLocationManager {
     }
 
     private boolean cachedState(Location currentLocation) {
-        return cachedLocation != null && cachedLocation.distanceTo(currentLocation) <= 100;
+        if (cachedLocation != null)
+            return cachedLocation.distanceTo(currentLocation) <= 100;
+
+        return false;
     }
 
     private void initLocationUpdateRequest()
@@ -60,7 +62,7 @@ public class MLocationManager {
         this.locationRequest = LocationRequest.create();
         this.locationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         this.locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        this.locationRequest.setSmallestDisplacement(SMALLEST_UPDATE_DISPLACEMENT_IN_METERS);
+//        this.locationRequest.setSmallestDisplacement(SMALLEST_UPDATE_DISPLACEMENT_IN_METERS);
 
         this.locationCallback = new LocationCallback() {
             @Override
@@ -68,12 +70,13 @@ public class MLocationManager {
                 super.onLocationResult(locationResult);
 
                 currentLocation = locationResult.getLastLocation();
-                PreferenceHelper.getInstance().setCachedLocation(currentLocation);
-
                 if (cachedState(currentLocation))
                     locationManagerInterface.userLocationUnchanged(cachedLocation);
                 else
                     locationManagerInterface.lastKnownLocation(currentLocation);
+
+                cachedLocation = currentLocation;
+                PreferenceHelper.getInstance().setCachedLocation(cachedLocation);
             }
         };
         this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient(Khoobad.context);
@@ -95,7 +98,9 @@ public class MLocationManager {
 
     public void stopUpdatingLocation() {
 
-        PreferenceHelper.getInstance().setCachedLocation(currentLocation);
+        if (currentLocation != null)
+            PreferenceHelper.getInstance().setCachedLocation(currentLocation);
+
         if (this.mFusedLocationClient != null && this.locationCallback != null)
             this.mFusedLocationClient.removeLocationUpdates(this.locationCallback);
 

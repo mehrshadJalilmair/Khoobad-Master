@@ -18,7 +18,7 @@ public class MainPresenterImpl implements MainPresenter.presenter, MainPresenter
     @Override
     public void onDestroy() {
 
-        mainView = null;
+        if (mainView != null)mainView = null;
         getVenuesIntractor.onDestroy();
     }
 

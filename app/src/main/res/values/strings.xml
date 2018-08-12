@@ -2,10 +2,10 @@
     <string name="app_name">Khoobad</string>
 
     <!--api keys-->
-    <!--<string name="foursquare_client_id">SA5OU5JKU20VMVQINTTRE2TVFJ1E4MAI3ZMMEMF10IE42ZSD</string>-->
-    <!--<string name="foursquare_client_secret">GGRNNAZNSNCCTAD4RHWTD5BL33H50CUNTOWPDMRRRCYT10S4</string>-->
-    <string name="foursquare_client_id">ZTMXPBP2DJUVI1XVNKFNSL5VRO1T45D1JG142VEFPOGRG1DN</string>
-    <string name="foursquare_client_secret">X1FYAC5DMKD0GXDHA4PLVA0SNWI1Y3ZUEVHHEB3UHUPTY312</string>
+    <string name="foursquare_client_id">SA5OU5JKU20VMVQINTTRE2TVFJ1E4MAI3ZMMEMF10IE42ZSD</string>
+    <string name="foursquare_client_secret">GGRNNAZNSNCCTAD4RHWTD5BL33H50CUNTOWPDMRRRCYT10S4</string>
+    <!--<string name="foursquare_client_id">ZTMXPBP2DJUVI1XVNKFNSL5VRO1T45D1JG142VEFPOGRG1DN</string>-->
+    <!--<string name="foursquare_client_secret">X1FYAC5DMKD0GXDHA4PLVA0SNWI1Y3ZUEVHHEB3UHUPTY312</string>-->
 
     <string name="TXT_NEARBY_VENUES">مکان های نزدیک شما</string>
     <string name="TXT_NO_VENUES">مکانی در اطراف شما یافت نشد.</string>
@@ -18,5 +18,8 @@
     <string name="TXT_CANT_SHOW_VENUE">خطا در نمایش مکان، مجددا تلاش کنید</string>
     <string name="TXT_EXCEED">سقف روزانه درخواست</string>
     <string name="TXT_VERIFED_VENUE">تایید شده</string>
+    <string name="TXT_VENUE_IS_OPEN">باز است</string>
+    <string name="TXT_VENUE_IS_CLOSED">بسته است!</string>
+    <string name="TXT_NOT_REGISTERD">ثبت نشده است</string>
 
 </resources>

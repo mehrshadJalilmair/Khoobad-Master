@@ -7,4 +7,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="WHITE">#FFFFFF</color>
     <color name="GREEN">#00BB00</color>
+    <color name="Transparent">#00000000</color>
 </resources>
