@@ -50,6 +50,8 @@ public class VenueCategory
 
         public String getCatUrl()
         {
+            if (prefix == null || suffix == null)
+                return null;
             return prefix + "100" + suffix;
         }
 

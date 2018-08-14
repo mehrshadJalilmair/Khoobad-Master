@@ -29,6 +29,7 @@ public class PreferenceHelper {
      */
     public Venues getCachedVenues()
     {
+        if (sharedPreferences == null)return null;
         String json = sharedPreferences.getString(CACHED_VENUES_PREF_TAG, null);
         return json == null ? null : new Gson().fromJson(json, Venues.class);
     }

@@ -69,10 +69,6 @@ public class Venues {
             public ArrayList<Venue> getItems() {
                 return items;
             }
-
-            public void setItems(ArrayList<Venue> items) {
-                this.items = items;
-            }
         }
     }
 }

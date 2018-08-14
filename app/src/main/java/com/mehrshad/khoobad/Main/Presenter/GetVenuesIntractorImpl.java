@@ -19,18 +19,18 @@ import retrofit2.Response;
 
 public class GetVenuesIntractorImpl implements MainPresenter.GetVenuesIntractor {
 
-    private Callback<Venues> venuesCallback;
     private Callback<VenueDetails> venueDetailsCallback;
 
     @Override
     public void getVenues(OnFinishedListener onFinishedListener , Query query) {
 
+        Callback<Venues> venuesCallback;
         if (query.cachedVenues || (!InternetConnection.getInstance().isConnected() && query.cachedVenues))
         {
             Venues venues =  PreferenceHelper.getInstance().getCachedVenues();
             if (venues == null)
             {
-                //onFinishedListener.onFailure(Khoobad.context.getResources().getString(R.string.TXT_NO_CACHED_VENUE)); //there is no cached venue
+                onFinishedListener.onFailure(Khoobad.context.getResources().getString(R.string.TXT_NO_CACHED_VENUE)); //there is no cached venue
             }
             else
             {
@@ -136,8 +136,6 @@ public class GetVenuesIntractorImpl implements MainPresenter.GetVenuesIntractor 
     @Override
     public void onDestroy() {
 
-        if (venuesCallback != null)
-            venuesCallback = null;
         if (venueDetailsCallback != null)
             venueDetailsCallback = null;
     }

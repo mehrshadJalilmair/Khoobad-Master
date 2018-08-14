@@ -16,5 +16,7 @@ public class Query
     public String radius = "500";
     public String ll;
     public String intent = "match";
+
     public boolean cachedVenues = false;
+    public int cachedVenuesLoadCount = 0;
 }

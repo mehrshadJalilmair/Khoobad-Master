@@ -114,6 +114,8 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
                 // Triggered only when new data needs to be appended to the list
                 // Add whatever code is needed to append new items to the bottom of the list
+
+                if (venuesQuery.cachedVenues)return;
                 venuesQuery.limit += venuesQuery.queryLimitIncBy;
                 presenter.loadMore(venuesQuery);
                 Log.d("loadmore" , venuesQuery.limit+"");
@@ -128,7 +130,7 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
                 android.R.color.holo_orange_dark,
                 android.R.color.holo_blue_dark);
 
-        adapter = new VenuesAdapter(getApplicationContext() , null , onRecyclerItemClickListener);
+        adapter = new VenuesAdapter(getApplicationContext() , new ArrayList<>() , onRecyclerItemClickListener);
         recyclerView.setAdapter(adapter);
     }
 
@@ -169,21 +171,28 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
     public void setDataToRecyclerView(Venues venues) {
 
         ArrayList<Venue> venueArrayList = new ArrayList<>();
-        if (venues.getResponse().getTotalResults() > 0)
-        {
-            /*
-             * merging all venues of all groups
-             */
-            for (Venues.Response.Group group:
-                    venues.getResponse().getGroups()) {
+        int resCount = venues.getResponse().getTotalResults();
 
-                venueArrayList.addAll(group.getItems());
+        if (resCount > 0)
+        {
+
+             //merging all venues of all groups
+
+            ArrayList<Venues.Response.Group> groups = venues.getResponse().getGroups();
+            if (groups != null)
+            {
+                for (int i = 0 ; i < groups.size() ; i++)
+                {
+                    Venues.Response.Group group = groups.get(i);
+                    if (group != null)
+                    {
+                        venueArrayList.addAll(group.getItems());
+                    }
+                }
             }
         }
-        Collections.sort(venueArrayList
-                , (o1, o2) -> o1.getBaseVenue().getLocation().getDistance().compareTo(o2.getBaseVenue().getLocation().getDistance()));
-        PreferenceHelper.getInstance().setCachedVenues(venues);
         adapter.addMoreVenues(venueArrayList);
+        PreferenceHelper.getInstance().setCachedVenues(venues);
     }
 
     /**
@@ -219,17 +228,17 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
 
     @Override
     public void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null)progressBar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        progressBar.setVisibility(View.INVISIBLE);
+        if (progressBar != null)progressBar.setVisibility(View.INVISIBLE);
     }
 
     @Override
     public void endRefreshing() {
-        swipeRefreshLayout.setRefreshing(false);
+        if (swipeRefreshLayout.isRefreshing())swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -264,6 +273,7 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
     public void lastKnownLocation(Location currentLocation) {
 
         venuesQuery.cachedVenues = false;
+        venuesQuery.cachedVenuesLoadCount = 0;
         venuesQuery.limit = 30;
         venuesQuery.ll = GeneralFunctions.persian_to_english(currentLocation.getLatitude()+","+currentLocation.getLongitude());
         presenter.fetchVenues(venuesQuery);
@@ -272,6 +282,8 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
     @Override
     public void userLocationUnchanged(Location cachedLocation) {
 
+        if (venuesQuery.cachedVenuesLoadCount == 1)return;
+        venuesQuery.cachedVenuesLoadCount++;
         venuesQuery.cachedVenues = true;
         presenter.fetchVenues(venuesQuery);
     }

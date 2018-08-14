@@ -36,7 +36,7 @@ public class MLocationManager {
     private Location cachedLocation;
     private Context context;
 
-    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 6000;
+    private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
 
     public MLocationManager(Context activity, LocationManagerInterface locationManagerInterface) {
 
@@ -70,7 +70,10 @@ public class MLocationManager {
             public void onLocationResult(LocationResult locationResult) {
                 super.onLocationResult(locationResult);
 
+                if (locationResult == null)return;;
                 currentLocation = locationResult.getLastLocation();
+
+                if (locationManagerInterface == null)return;
                 if (cachedState(currentLocation))
                     locationManagerInterface.userLocationUnchanged(cachedLocation);
                 else

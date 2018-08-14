@@ -2,25 +2,23 @@ package com.mehrshad.khoobad.Main.Adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mehrshad.khoobad.Interface.OnRecyclerItemClickListener;
-import com.mehrshad.khoobad.Khoobad;
 import com.mehrshad.khoobad.Model.Venue;
+import com.mehrshad.khoobad.Model.VenueCategory;
 import com.mehrshad.khoobad.R;
 import com.mehrshad.khoobad.Util.GeneralFunctions;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-
-import static android.view.View.VISIBLE;
+import java.util.Collections;
 
 public class VenuesAdapter extends RecyclerView.Adapter<VenueViewHolder> {
 
@@ -37,7 +35,14 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenueViewHolder> {
 
     public void addMoreVenues(ArrayList<Venue> venues)
     {
+        if (this.venues != null)
+        {
+            this.venues.clear();
+            this.notifyDataSetChanged();
+        }
         this.venues = venues;
+        Collections.sort(this.venues
+                , (o1, o2) -> o1.getBaseVenue().getLocation().getDistance().compareTo(o2.getBaseVenue().getLocation().getDistance()));
         this.notifyDataSetChanged();
     }
 
@@ -56,19 +61,25 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenueViewHolder> {
 
         Venue venue = venues.get(position);
 
-        if (venue.getBaseVenue().getCategories().size() > 0)
-        {
-            if (holder.imageView != null && venue.getBaseVenue().getCategories().get(0).getIcon() != null)
-            {
-                holder.imageView.setColorFilter(ContextCompat.getColor(context,
-                        R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
-                Picasso.with(context)
-                        .load(venue.getBaseVenue().getCategories().get(0).getIcon().getCatUrl())
-                        .placeholder(R.drawable.no_image)
-                        .error(R.drawable.no_image)
-                        .into(holder.imageView);
-            }
-        }
+//        if (venue.getBaseVenue().getCategories() != null && venue.getBaseVenue().getCategories().size() > 0)
+//        {
+//            if (holder.imageView != null)
+//            {
+//                VenueCategory.Icon ic = venue.getBaseVenue().getCategories().get(0).getIcon();
+//                if (ic != null && ic.getCatUrl() != null)
+//                {
+//                    holder.imageView.setColorFilter(ContextCompat.getColor(context,
+//                            R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
+//
+//                    Picasso.with(context)
+//                            .load(ic.getCatUrl())
+//                            .placeholder(R.drawable.no_image)
+//                            .error(R.drawable.no_image)
+//                            .into(holder.imageView);
+//                }
+//
+//            }
+//        }
 
         if (venue.getBaseVenue().getName() != null)
             holder.nameTv.setText(venue.getBaseVenue().getName());
