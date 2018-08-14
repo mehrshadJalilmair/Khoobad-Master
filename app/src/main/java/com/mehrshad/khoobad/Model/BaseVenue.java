@@ -19,7 +19,7 @@ public class BaseVenue {
     private VenueLocation location;
 
     @SerializedName("rating")
-    private Double rating;
+    private double rating;
 
     @SerializedName("ratingColor")
     private String ratingColor;
@@ -29,10 +29,6 @@ public class BaseVenue {
 
     public ArrayList<VenueCategory> getCategories() {
         return categories;
-    }
-
-    public void setCategories(ArrayList<VenueCategory> categories) {
-        this.categories = categories;
     }
 
     public String getId() {
@@ -47,10 +43,6 @@ public class BaseVenue {
         return location;
     }
 
-    public void setLocation(VenueLocation location) {
-        this.location = location;
-    }
-
     public String getName() {
         return name;
     }
@@ -59,27 +51,12 @@ public class BaseVenue {
         this.name = name;
     }
 
-    public Double getRating() {
+    public double getRating() {
         return rating;
-    }
-
-    public String getRatingColor() {
-        return ratingColor;
-    }
-
-    public void setRating(Double rating) {
-        this.rating = rating;
-    }
-
-    public void setRatingColor(String ratingColor) {
-        this.ratingColor = ratingColor;
     }
 
     public VenuePhotos getPhotos() {
         return photos;
     }
 
-    public void setPhotos(VenuePhotos photos) {
-        this.photos = photos;
-    }
 }

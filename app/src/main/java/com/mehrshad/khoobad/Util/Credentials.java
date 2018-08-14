@@ -13,8 +13,8 @@ public class Credentials {
 
     private Credentials() {
 
-        client_id = Khoobad.context.getResources().getString(R.string.foursquare_client_id);
-        client_secret = Khoobad.context.getResources().getString(R.string.foursquare_client_secret);
+        client_id = Khoobad.getContext().getResources().getString(R.string.foursquare_client_id);
+        client_secret = Khoobad.getContext().getResources().getString(R.string.foursquare_client_secret);
     }
 
     private String client_id;

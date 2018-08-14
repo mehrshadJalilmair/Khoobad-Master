@@ -9,16 +9,22 @@ import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import com.mehrshad.khoobad.Khoobad;
 import com.mehrshad.khoobad.Main.Adapter.ImageSliderAdapter;
 import com.mehrshad.khoobad.Model.VenueDetails;
 import com.mehrshad.khoobad.R;
 import com.mehrshad.khoobad.Util.GeneralFunctions;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
 public class ActVenue extends AppCompatActivity {
 
     private VenueDetails venueDetails;
+    private Timer timer;
+    private ViewPager imageSliderVP;
+    private int imageUrlsCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,7 @@ public class ActVenue extends AppCompatActivity {
 
     private void initializeUI() {
 
-        ViewPager imageSliderVP = findViewById(R.id.image_slider);
+        imageSliderVP = findViewById(R.id.image_slider);
         ImageView categoryImg = findViewById(R.id.ven_cat_img);
         ImageView verifiedImg = findViewById(R.id.ven_verified);
         RatingBar ratingBar = findViewById(R.id.ratingBar);
@@ -43,34 +49,39 @@ public class ActVenue extends AppCompatActivity {
         TextView addressTv = findViewById(R.id.ven_address);
 
         //init image slider
+        ArrayList<String>urls = venueDetails.getPhotosUrls();
+        imageUrlsCount = urls.size();
         ImageSliderAdapter viewPagerAdapter =
-                new ImageSliderAdapter(this , venueDetails.getPhotosUrls());
+                new ImageSliderAdapter(this, urls);
         imageSliderVP.setAdapter(viewPagerAdapter);
 
+        if (imageUrlsCount > 1)
+        {
+            timer = new Timer();
+            timer.scheduleAtFixedRate(new SliderTimer(), 3000, 4000);
+        }
+
         //init category image
-        categoryImg.setColorFilter(ContextCompat.getColor(Khoobad.context,
+        categoryImg.setColorFilter(ContextCompat.getColor(this,
                 R.color.WHITE), android.graphics.PorterDuff.Mode.MULTIPLY);
         if (venueDetails.getCategories().size() > 0)
         {
-            Picasso.with(Khoobad.context)
+            Picasso.with(getApplicationContext())
                     .load(venueDetails.getCategories().get(0).getIcon().getCatUrl())
                     .fit()
                     .into(categoryImg);
         }
 
         //verfied = true,false
-        venueDetails.getResponse().getVenue().setVerified(true);
+        //venueDetails.getResponse().getVenue().setVerified(true);
         if (venueDetails.getResponse().getVenue().getVerified())
         {
             verifiedImg.setVisibility(View.VISIBLE);
         }
 
         //rating
-        Float rating = 3.5f;//venueDetails.getResponse().getVenue().getRating();
-        if (rating != null)
-        {
-            ratingBar.setRating(rating);
-        }
+        float rating = (float)venueDetails.getResponse().getVenue().getRating();
+        ratingBar.setRating(rating);
 
         //name
         nameTv.setText(venueDetails.getResponse().getVenue().getName());
@@ -104,5 +115,27 @@ public class ActVenue extends AppCompatActivity {
         if (venueDetails.getResponse().getVenue().getContact() != null
                 && venueDetails.getResponse().getVenue().getContact().getPhone() != null)
             phoneTv.setText(venueDetails.getResponse().getVenue().getContact().getPhone());
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (timer != null)
+            timer.cancel();
+    }
+
+    private class SliderTimer extends TimerTask {
+
+        @Override
+        public void run() {
+            ActVenue.this.runOnUiThread(() -> {
+                if (imageSliderVP.getCurrentItem() < imageUrlsCount - 1) {
+                    imageSliderVP.setCurrentItem(imageSliderVP.getCurrentItem() + 1);
+                } else {
+                    imageSliderVP.setCurrentItem(0);
+                }
+            });
+        }
     }
 }

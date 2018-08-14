@@ -20,6 +20,11 @@ public class Khoobad extends Application {
         context = getApplicationContext();
     }
 
+    public static Context getContext()
+    {
+        return context;
+    }
+
     @Override
     public void onLowMemory() {
         super.onLowMemory();

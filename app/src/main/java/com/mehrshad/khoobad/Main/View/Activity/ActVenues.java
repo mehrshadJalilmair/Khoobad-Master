@@ -1,13 +1,16 @@
 package com.mehrshad.khoobad.Main.View.Activity;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,10 +28,10 @@ import com.mehrshad.khoobad.Main.Adapter.VenuesAdapter;
 import com.mehrshad.khoobad.Main.Presenter.GetVenuesIntractorImpl;
 import com.mehrshad.khoobad.Main.Presenter.MainPresenter;
 import com.mehrshad.khoobad.Main.Presenter.MainPresenterImpl;
+import com.mehrshad.khoobad.Model.Query;
 import com.mehrshad.khoobad.Model.Venue;
 import com.mehrshad.khoobad.Model.VenueDetails;
 import com.mehrshad.khoobad.Model.Venues;
-import com.mehrshad.khoobad.Model.Query;
 import com.mehrshad.khoobad.R;
 import com.mehrshad.khoobad.Util.DateFormatter;
 import com.mehrshad.khoobad.Util.EndlessRecyclerViewScrollListener;
@@ -50,6 +53,9 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
 
     Query venuesQuery;
     static public final int REQUEST_LOCATION = 1;
+    static public final int REQUEST_LOCATION_SRVICE = 2;
+
+    AlertDialog enableLocationDlg = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +66,6 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
         initProgressBar();
         initQuery();
         initLocationManager();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-
     }
 
     @Override
@@ -92,7 +91,7 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
     private void initQuery() {
 
         venuesQuery = new Query(this);
-        venuesQuery.v = DateFormatter.currentDate();
+        venuesQuery.v = GeneralFunctions.persian_to_english(DateFormatter.currentDate());
         presenter = new MainPresenterImpl(this, new GetVenuesIntractorImpl());
     }
 
@@ -129,7 +128,7 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
                 android.R.color.holo_orange_dark,
                 android.R.color.holo_blue_dark);
 
-        adapter = new VenuesAdapter(null , onRecyclerItemClickListener);
+        adapter = new VenuesAdapter(getApplicationContext() , null , onRecyclerItemClickListener);
         recyclerView.setAdapter(adapter);
     }
 
@@ -138,7 +137,7 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
         public void onItemClick(String VENUE_ID) {
 
             runOnUiThread(() -> recyclerView.setEnabled(false));
-            presenter.fetchVenueById(VENUE_ID , DateFormatter.currentDate());
+            presenter.fetchVenueById(VENUE_ID , GeneralFunctions.persian_to_english(DateFormatter.currentDate()));
         }
     };
 
@@ -240,12 +239,33 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION , Manifest.permission.ACCESS_COARSE_LOCATION},REQUEST_LOCATION);
     }
 
+    /*
+    * to enable location service
+     */
+    @Override
+    public void checkIsLocationProviderEnable() {
+
+        Context ctx = this;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+        builder.setCancelable(false);
+        builder.setMessage(ctx.getResources().getString(R.string.TXT_GPS_NOT_ENABLE));
+        builder.setPositiveButton(ctx.getResources().getString(R.string.TXT_ENABLE_GPS), (paramDialogInterface, paramInt) -> {
+
+            Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+            startActivityForResult(myIntent , REQUEST_LOCATION_SRVICE);
+        });
+        builder.setNegativeButton(ctx.getString(R.string.TXT_CANCEL), (paramDialogInterface, paramInt) -> {
+        });
+        enableLocationDlg = builder.show();
+    }
+
     @Override
     public void lastKnownLocation(Location currentLocation) {
 
         venuesQuery.cachedVenues = false;
         venuesQuery.limit = 30;
-        venuesQuery.ll = currentLocation.getLatitude()+","+currentLocation.getLongitude();
+        venuesQuery.ll = GeneralFunctions.persian_to_english(currentLocation.getLatitude()+","+currentLocation.getLongitude());
         presenter.fetchVenues(venuesQuery);
     }
 
@@ -272,6 +292,16 @@ public class ActVenues extends AppCompatActivity implements MainPresenter.MainVi
             }
             locationManager.setLocationAccess(locationAccess);
             if (locationAccess)locationManager.startUpdatingLocation();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_LOCATION_SRVICE)
+        {
+            locationManager.startUpdatingLocation();
         }
     }
 }

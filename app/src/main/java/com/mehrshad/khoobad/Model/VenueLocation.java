@@ -32,14 +32,6 @@ public class VenueLocation
         return String.valueOf(distance.intValue()) + " متر";
     }
 
-    public Double getLat() {
-        return lat;
-    }
-
-    public Double getLng() {
-        return lng;
-    }
-
     public String getAddress() {
 
         String address = this.address;
@@ -54,25 +46,5 @@ public class VenueLocation
 
         }
         return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public void setDistance(Double distance) {
-        this.distance = distance;
-    }
-
-    public void setFormattedAddress(ArrayList<String> formattedAddress) {
-        this.formattedAddress = formattedAddress;
-    }
-
-    public void setLat(Double lat) {
-        this.lat = lat;
-    }
-
-    public void setLng(Double lng) {
-        this.lng = lng;
     }
 }

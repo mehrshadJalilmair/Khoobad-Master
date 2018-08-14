@@ -10,7 +10,7 @@ import com.mehrshad.khoobad.R;
 class VenueViewHolder extends RecyclerView.ViewHolder {
 
     ImageView imageView;
-    TextView nameTv,distTv,categoryTv,rateTv;
+    TextView nameTv,distTv,categoryTv;
 
     VenueViewHolder(View itemView) {
         super(itemView);
@@ -20,6 +20,5 @@ class VenueViewHolder extends RecyclerView.ViewHolder {
         nameTv = itemView.findViewById(R.id.ven_name);
         distTv = itemView.findViewById(R.id.ven_distance);
         categoryTv = itemView.findViewById(R.id.ven_category);
-        rateTv = itemView.findViewById(R.id.ven_rating);
     }
 }

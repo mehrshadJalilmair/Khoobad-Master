@@ -30,7 +30,7 @@ public class GetVenuesIntractorImpl implements MainPresenter.GetVenuesIntractor 
             Venues venues =  PreferenceHelper.getInstance().getCachedVenues();
             if (venues == null)
             {
-                onFinishedListener.onFailure(Khoobad.context.getResources().getString(R.string.TXT_NO_CACHED_VENUE)); //there is no cached venue
+                //onFinishedListener.onFailure(Khoobad.context.getResources().getString(R.string.TXT_NO_CACHED_VENUE)); //there is no cached venue
             }
             else
             {
@@ -61,20 +61,20 @@ public class GetVenuesIntractorImpl implements MainPresenter.GetVenuesIntractor 
                                 }
                             }
                         }
-                        onFinishedListener.onFailure(Khoobad.context.getResources().getString(R.string.TXT_PARSING_ERROR)); //status is not  >= 200 or < 300
+                        onFinishedListener.onFailure(Khoobad.getContext().getResources().getString(R.string.TXT_PARSING_ERROR)); //status is not  >= 200 or < 300
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<Venues> call, @NonNull Throwable t) {
 
-                        onFinishedListener.onFailure(Khoobad.context.getResources().getString(R.string.TXT_FETCH__VENUES_ERROR)); //400
+                        onFinishedListener.onFailure(Khoobad.getContext().getResources().getString(R.string.TXT_FETCH__VENUES_ERROR)); //400
                     }
                 };
                 venuesCall.enqueue(venuesCallback);
             }
             else
             {
-                onFinishedListener.onFailure(Khoobad.context.getResources().getString(R.string.TXT_NO_INTERNET_CONNECTION)); //there is no internet connection
+                onFinishedListener.onFailure(Khoobad.getContext().getResources().getString(R.string.TXT_NO_INTERNET_CONNECTION)); //there is no internet connection
             }
         }
     }
@@ -105,12 +105,12 @@ public class GetVenuesIntractorImpl implements MainPresenter.GetVenuesIntractor 
                         }
                     }
 
-                    String msg  = Khoobad.context.getResources().
+                    String msg  = Khoobad.getContext().getResources().
                             getString(R.string.TXT_PARSING_ERROR);;
                     switch (response.code())
                     {
                         case 429:
-                            Khoobad.context.getResources().
+                            Khoobad.getContext().getResources().
                                     getString(R.string.TXT_EXCEED);
                             break;
                     }
@@ -122,14 +122,14 @@ public class GetVenuesIntractorImpl implements MainPresenter.GetVenuesIntractor 
                 @Override
                 public void onFailure(@NonNull Call<VenueDetails> call, @NonNull Throwable t) {
 
-                    onGetVenueFinishedListener.onGetVenueFailure(Khoobad.context.getResources().getString(R.string.TXT_FETCH__VENUES_ERROR)); //400
+                    onGetVenueFinishedListener.onGetVenueFailure(Khoobad.getContext().getResources().getString(R.string.TXT_FETCH__VENUES_ERROR)); //400
                 }
             };
             venueDetailsCall.enqueue(venueDetailsCallback);
         }
         else
         {
-            onGetVenueFinishedListener.onGetVenueFailure(Khoobad.context.getResources().getString(R.string.TXT_NO_INTERNET_CONNECTION)); //there is no internet connection
+            onGetVenueFinishedListener.onGetVenueFailure(Khoobad.getContext().getResources().getString(R.string.TXT_NO_INTERNET_CONNECTION)); //there is no internet connection
         }
     }
 

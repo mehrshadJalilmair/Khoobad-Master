@@ -20,16 +20,8 @@ public class VenueCategory
         return icon;
     }
 
-    public String getPluralName() {
-        return pluralName;
-    }
-
     public void setIcon(Icon icon) {
         this.icon = icon;
-    }
-
-    public void setPluralName(String pluralName) {
-        this.pluralName = pluralName;
     }
 
     public String getId() {
@@ -65,16 +57,9 @@ public class VenueCategory
             return suffix;
         }
 
-        public String getPrefix() {
-            return prefix;
-        }
-
         public void setSuffix(String suffix) {
             this.suffix = suffix;
         }
 
-        public void setPrefix(String prefix) {
-            this.prefix = prefix;
-        }
     }
 }

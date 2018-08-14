@@ -18,7 +18,7 @@ public class InternetConnection {
 
     private NetworkInfo network()
     {
-        Context context = Khoobad.context;
+        Context context = Khoobad.getContext();
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 

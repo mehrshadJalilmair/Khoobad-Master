@@ -72,20 +72,12 @@ public class VenuePhotos
                 return prefix + GeneralFunctions.getSize().get(0) + "x" + (int)(0.4*GeneralFunctions.getSize().get(1)) + suffix;
             }
 
-            public String getPrefix() {
-                return prefix;
-            }
-
             public String getSuffix() {
                 return suffix;
             }
 
             public String getVisibility() {
                 return visibility;
-            }
-
-            public void setPrefix(String prefix) {
-                this.prefix = prefix;
             }
 
             public void setSuffix(String suffix) {

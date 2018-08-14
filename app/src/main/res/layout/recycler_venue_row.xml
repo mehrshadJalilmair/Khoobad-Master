@@ -3,6 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_gravity="end"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -23,66 +25,54 @@
         android:id="@+id/ven_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:textSize="14sp"
         android:textAlignment="viewEnd"
-        android:layout_gravity="end"
         android:textColor="@color/colorPrimaryDark"
+        android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/venueImg"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ven_rating"
-        app:layout_constraintTop_toTopOf="@+id/venueImg"
-         />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/venueImg" />
 
     <TextView
         android:id="@+id/ven_category"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/colorDark"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toStartOf="@+id/venueImg"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ven_name" />
+
+
+    <TextView
+        android:id="@+id/ven_distance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:textAlignment="viewEnd"
-        android:layout_gravity="end"
-        android:layout_marginTop="4dp"
-        android:textSize="12sp"
-        android:textColor="@color/colorDark"
-        app:layout_constraintEnd_toStartOf="@+id/venueImg"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/ven_rating"
-        app:layout_constraintTop_toBottomOf="@+id/ven_name"
-         />
-
-
-    <TextView
-        android:id="@+id/ven_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="4dp"
         android:textColor="@color/colorGray"
         android:textSize="12sp"
         app:layout_constraintEnd_toStartOf="@+id/venueImg"
-        app:layout_constraintTop_toBottomOf="@+id/ven_category" />
-
-
-    <TextView
-        android:id="@+id/ven_rating"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:textSize="12sp"
-        android:visibility="gone"
-        android:padding="5dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/ven_category"
+        android:gravity="end" />
+
 
     <View
         android:id="@+id/divider"

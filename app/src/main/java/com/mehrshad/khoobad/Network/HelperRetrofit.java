@@ -15,8 +15,6 @@ import okhttp3.Request;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.mehrshad.khoobad.Khoobad.context;
-
 
 public class HelperRetrofit {
 
@@ -29,13 +27,10 @@ public class HelperRetrofit {
     public  Retrofit configureRetrofit(final String baseUrl) {
         final Retrofit retrofit;
 
-        OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-            @Override
-            public okhttp3.Response intercept(@NonNull Chain chain) throws IOException {
+        OkHttpClient httpClient = new OkHttpClient.Builder().addInterceptor(chain -> {
 
-                Request request = chain.request().newBuilder().build();
-                return chain.proceed(request);
-            }
+            Request request = chain.request().newBuilder().build();
+            return chain.proceed(request);
         }).build();
 
         Gson gson = new GsonBuilder().setLenient().create();

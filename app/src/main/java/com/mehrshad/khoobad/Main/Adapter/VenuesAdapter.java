@@ -1,6 +1,7 @@
 package com.mehrshad.khoobad.Main.Adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
@@ -25,10 +26,11 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenueViewHolder> {
 
     private ArrayList<Venue> venues;
     private OnRecyclerItemClickListener onRecyclerItemClickListener;
+    private Context context;
 
+    public VenuesAdapter(Context context, ArrayList<Venue> venues, OnRecyclerItemClickListener onRecyclerItemClickListener ) {
 
-    public VenuesAdapter(ArrayList<Venue> venues, OnRecyclerItemClickListener onRecyclerItemClickListener ) {
-
+        this.context = context;
         this.venues = venues;
         this.onRecyclerItemClickListener = onRecyclerItemClickListener;
     }
@@ -56,28 +58,24 @@ public class VenuesAdapter extends RecyclerView.Adapter<VenueViewHolder> {
 
         if (venue.getBaseVenue().getCategories().size() > 0)
         {
-            holder.imageView.setColorFilter(ContextCompat.getColor(Khoobad.context,
-                    R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
-            Picasso.with(Khoobad.context)
-                    .load(venue.getBaseVenue().getCategories().get(0).getIcon().getCatUrl())
-                    .placeholder(R.drawable.no_image)
-                    .error(R.drawable.no_image)
-                    .fit()
-                    .into(holder.imageView);
+            if (holder.imageView != null && venue.getBaseVenue().getCategories().get(0).getIcon() != null)
+            {
+                holder.imageView.setColorFilter(ContextCompat.getColor(context,
+                        R.color.colorPrimaryDark), android.graphics.PorterDuff.Mode.MULTIPLY);
+                Picasso.with(context)
+                        .load(venue.getBaseVenue().getCategories().get(0).getIcon().getCatUrl())
+                        .placeholder(R.drawable.no_image)
+                        .error(R.drawable.no_image)
+                        .into(holder.imageView);
+            }
         }
 
-        holder.nameTv.setText(venue.getBaseVenue().getName());
-        holder.distTv.setText(GeneralFunctions.english_to_persian(venue.getBaseVenue().getLocation().getDistance().toString()));
-        holder.categoryTv.setText(venue.getBaseVenue().getCategories().get(0).getName());
-
-        if (venue.getBaseVenue().getRating() != null)
-        {
-            holder.rateTv.setVisibility(VISIBLE);
-            holder.rateTv.setText(venue.getBaseVenue().getRating().toString());
-            holder.rateTv.setBackgroundResource(R.drawable.rating_tv_corner);
-            GradientDrawable drawable = (GradientDrawable) holder.rateTv.getBackground();
-            drawable.setColor(Color.parseColor(venue.getBaseVenue().getRatingColor()));
-        }
+        if (venue.getBaseVenue().getName() != null)
+            holder.nameTv.setText(venue.getBaseVenue().getName());
+        if (venue.getBaseVenue().getLocation() !=null)
+            holder.distTv.setText(GeneralFunctions.english_to_persian(venue.getBaseVenue().getLocation().getDistance()));
+        if (venue.getBaseVenue().getCategories() != null)
+            holder.categoryTv.setText(venue.getBaseVenue().getCategories().get(0).getName());
 
         holder.itemView.setOnClickListener(v -> onRecyclerItemClickListener.onItemClick(venue.getBaseVenue().getId()));
     }

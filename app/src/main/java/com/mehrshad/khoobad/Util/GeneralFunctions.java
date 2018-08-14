@@ -55,7 +55,7 @@ public class GeneralFunctions {
 
     public static ArrayList<Integer> getSize()
     {
-        WindowManager wm = (WindowManager) Khoobad.context.getSystemService(Context.WINDOW_SERVICE);
+        WindowManager wm = (WindowManager) Khoobad.getContext().getSystemService(Context.WINDOW_SERVICE);
         Display display = null;
         if (wm != null) {
             display = wm.getDefaultDisplay();

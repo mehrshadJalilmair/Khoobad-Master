@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class ImageSliderAdapter extends PagerAdapter {
 
     private Context context;
-    private LayoutInflater layoutInflater;
     private ArrayList<String> imageUrls;
 
     public ImageSliderAdapter(Context context , ArrayList<String> imageUrls) {
@@ -42,8 +41,9 @@ public class ImageSliderAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, final int position) {
 
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = null;
+
         if (layoutInflater != null) {
             view = layoutInflater.inflate(R.layout.viewpager_image_item, null);
         }
@@ -52,10 +52,13 @@ public class ImageSliderAdapter extends PagerAdapter {
             imageView = view.findViewById(R.id.imageView);
         }
 
-        Picasso.with(view.getContext())
-                .load(imageUrls.get(position))
-                .error(R.drawable.no_image)
-                .into(imageView);
+        if (imageView != null)
+        {
+            Picasso.with(view.getContext())
+                    .load(imageUrls.get(position))
+                    .error(R.drawable.no_image)
+                    .into(imageView);
+        }
 
         ViewPager vp = (ViewPager) container;
         vp.addView(view, 0);

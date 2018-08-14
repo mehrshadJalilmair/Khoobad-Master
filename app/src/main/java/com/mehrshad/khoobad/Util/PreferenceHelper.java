@@ -16,7 +16,7 @@ public class PreferenceHelper {
     }
     private PreferenceHelper() {
 
-        sharedPreferences = Khoobad.context.getSharedPreferences("AppData" , Context.MODE_PRIVATE);
+        sharedPreferences = Khoobad.getContext().getSharedPreferences("AppData" , Context.MODE_PRIVATE);
     }
 
     private SharedPreferences sharedPreferences;

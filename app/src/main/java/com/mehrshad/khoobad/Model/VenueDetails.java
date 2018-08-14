@@ -16,9 +16,6 @@ public class VenueDetails implements Serializable {
     public Response getResponse() {
         return response;
     }
-    public void setResponse(Response response) {
-        this.response = response;
-    }
 
     public Meta getMeta() {
         return meta;
@@ -58,9 +55,6 @@ public class VenueDetails implements Serializable {
         public VenueDS getVenue() {
             return venue;
         }
-        public void setVenue(VenueDS venue) {
-            this.venue = venue;
-        }
 
         public class VenueDS extends BaseVenue
         {
@@ -70,34 +64,21 @@ public class VenueDetails implements Serializable {
             @SerializedName("verified")
             private Boolean verified;
 
-            @SerializedName("url")
-            private String url;
-
             @SerializedName("description")
             private String description;
 
             @SerializedName("hours")
             private VenueHours hours;
 
-
             public VenueContact getContact() {
                 return contact;
             }
 
-            public void setContact(VenueContact contact) {
-                this.contact = contact;
-            }
-
-            public String getUrl() {
-                return url;
-            }
-
             public Boolean getVerified() {
-                return verified;
-            }
 
-            public void setUrl(String url) {
-                this.url = url;
+                if (verified != null)
+                    return verified;
+                return false;
             }
 
             public void setVerified(Boolean verified) {
@@ -116,9 +97,6 @@ public class VenueDetails implements Serializable {
                 return hours;
             }
 
-            public void setHours(VenueHours hours) {
-                this.hours = hours;
-            }
         }
     }
 }
